@@ -88,15 +88,16 @@ const getAvailableSeats = async (registrationNumber, source, destination, dateOf
 
         const availableSeats = totalSeats - totalBookedSeats + tempSeats;
         
-        const percent = (availableSeats/totalSeats)*100;
+        const percent = 100 - (availableSeats/totalSeats)*100;
         let color = "green";
 
-        if(percent > 60 || percent <= 90){
+        if(percent > 60 && percent <= 90){
             color = "yellow";
         }else if(percent > 90){
             color = "red";
         }
         
+
 
         return {availableSeats, color};
     } catch (error) {

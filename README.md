@@ -52,7 +52,7 @@ The environment variables can be found and modified in the `.env` file.
 ```bash
 
 # MongoDB URL
-MONGO_URL = mongodb+srv://shivank:r86qIG7SRAW3aya3@busbooking.gwnrbl3.mongodb.net/?retryWrites=true&w=majority&appName=BusBooking
+MONGO_URL = mongodb+srv://shivank:{Password}@busbooking.gwnrbl3.mongodb.net/?retryWrites=true&w=majority&appName=BusBooking
 
 # JWT secret token
 JWT_SECRET = thisistherealsecreat
@@ -61,7 +61,7 @@ JWT_SECRET = thisistherealsecreat
 MAIL_USERNAME = shivankshukla2001@gmail.com
 
 #Password for nodemailer
-MAIL_PASSWORD = hnfdnqxewvxzvtee
+MAIL_PASSWORD = email_password
 
 ```
 

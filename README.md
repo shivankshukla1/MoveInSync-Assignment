@@ -4,7 +4,6 @@
 
 - [MoveInSync Assignment \[Bus Booking System (backend)\]](#moveinsync-assignment-bus-booking-system-backend)
   - [Table of Contents](#table-of-contents)
-  - [DB Schema Diagram](#db-schema-diagram)
   - [Manual Installation](#manual-installation)
   - [Commands](#commands)
   - [Environment Variables](#environment-variables)
@@ -12,10 +11,6 @@
     - [API Endpoints](#api-endpoints)
 
 
-
-## DB Schema Diagram
-
-![Schema](./screenshots/schema.png)
 
 ## Manual Installation
 
@@ -85,24 +80,163 @@ app.js            # Application entry point
 List of available API:
 
 **Auth routes**:
+1. **User Registration (`POST /register`):**
+   - **Input Format:**
+     ```
+     Name: User Name
+     Email: user@example.com
+     Password: user_password
+     ```
+   - Creates a new user account with the provided name, email, and password.
 
-`POST /register` - User Registration\
-`POST /login` - User Login\
-`POST /adminlogin` - Admin Login\
-`POST /userverification` - User Verification\
-`POST /forgotpassword` - User Forgot Password\
-`POST /updatepassword` - Update User Password
+2. **User Login (`POST /login`):**
+   - **Input Format:**
+     ```
+     Email: user@example.com
+     Password: user_password
+     ```
+   - Authenticates the user with the provided email and password.
 
-**User routes**:\
-`POST /getbusdetails` - Get Bus Details (Requires Authentication)\
-`GET /getbusdetails` - Get All Buses\
-`GET /bookedtickets` - Get Booked Tickets (Requires Authentication)\
-`POST /cancelticket` - Cancel Ticket (Requires Authentication)\
-`POST /findseat` - Find Available Seats (Requires Authentication)\
-`POST /bookseat` - Book Seats (Requires Authentication)
+3. **Admin Login (`POST /adminlogin`):**
+   - **Input Format:**
+     ```
+     Email: admin@example.com
+     Password: admin_password
+     ```
+   - Authenticates the admin with the provided email and password.
+
+4. **User Verification (`POST /userverification`):**
+   - **Input Format:**
+     ```
+     Email: user@example.com
+     OTP: 123456
+     ```
+   - Verifies the user by confirming the OTP sent to their email during registration.
+
+5. **Forgot Password (`POST /forgotpassword`):**
+   - **Input Format:**
+     ```
+     Email: user@example.com
+     ```
+   - Sends an OTP to the user's email for resetting the password.
+
+6. **Update Password (`POST /updatepassword`):**
+   - **Input Format:**
+     ```
+     Email: user@example.com
+     OTP: 123456
+     New Password: new_user_password
+     ```
+   - Updates the user's password after successful OTP verification.
 
 
-**Admin routes**:\
-`POST /addbus` - Add Bus (Admin Only)\
-`POST /updatebus/:registrationNumber` - Update Bus (Admin Only)\
-`POST /deletebus/:registrationNumber` - Delete Bus (Admin Only)
+**Admin routes**:
+
+1. **Add Bus (`POST /addbus`):**
+   - **Admin Only:** Yes
+   - **Input Format:**
+     ```
+     {
+       "busName": "Bus Name",
+       "registrationNumber": "Bus Registration Number",
+       "totalSeats": 40,
+       "daysOfOperation": [1, 1, 1, 1, 1, 1, 1],
+       "startTime": "08:00 AM",
+       "endTime": "10:00 PM"
+     }
+     ```
+   - Adds a new bus to the system with the provided details.
+
+2. **Update Bus (`POST /updatebus/:registrationNumber`):**
+   - **Admin Only:** Yes
+   - **Input Format:**
+     ```
+     {
+       "busName": "Updated Bus Name",
+       "totalSeats": 50,
+       "daysOfOperation": [1, 0, 1, 1, 0, 1, 1],
+       "startTime": "09:00 AM",
+       "endTime": "11:00 PM"
+     }
+     ```
+   - Updates the details of a specific bus identified by its registration number.
+
+3. **Delete Bus (`POST /deletebus/:registrationNumber`):**
+   - **Admin Only:** Yes
+   - **Input Format:**
+     ```
+     {
+       "confirmation": true
+     }
+     ```
+   - Deletes a specific bus identified by its registration number. Requires confirmation.
+
+
+
+
+**User routes**:
+
+1. **Get Bus Details (`POST /getbusdetails`):**
+   - **Authentication Required (`isLoggedIn`):** Yes
+   - **Input Format:**
+     ```
+     {
+       "source": "Source City",
+       "destination": "Destination City",
+       "dateOfTravel": "YYYY-MM-DD"
+     }
+     ```
+   - Retrieves bus details based on the source, destination, and date of travel.
+
+2. **Get All Buses (`GET /getbusdetails`):**
+   - **Authentication Required (`isLoggedIn`):** No
+   - Retrieves details of all available buses.
+
+3. **Get Booked Tickets (`GET /bookedtickets`):**
+   - **Authentication Required (`isLoggedIn`):** Yes
+   - **Input Format:**
+     ```
+     {
+       "email": "user@example.com"
+     }
+     ```
+   - Retrieves booked tickets for a specific user.
+
+4. **Cancel Ticket (`POST /cancelticket`):**
+   - **Authentication Required (`isLoggedIn`):** Yes
+   - **Input Format:**
+     ```
+     {
+       "email": "user@example.com",
+       "ticketId": "123456"
+     }
+     ```
+   - Cancels a booked ticket for a specific user.
+
+5. **Find Available Seats (`POST /findseat`):**
+   - **Authentication Required (`isLoggedIn`):** Yes
+   - **Input Format:**
+     ```
+     {
+       "registrationNumber": "BusRegistrationNumber",
+       "source": "Source City",
+       "destination": "Destination City",
+       "dateOfTravel": "YYYY-MM-DD"
+     }
+     ```
+   - Finds available seats for a specific bus on a given route and date.
+
+6. **Book Seats (`POST /bookseat`):**
+   - **Authentication Required (`isLoggedIn`):** Yes
+   - **Input Format:**
+     ```
+     {
+       "registrationNumber": "BusRegistrationNumber",
+       "source": "Source City",
+       "destination": "Destination City",
+       "dateOfTravel": "YYYY-MM-DD",
+       "ticketCount": 2,
+       "email": "user@example.com"
+     }
+     ```
+   - Books seats for a specific bus on a given route and date.
